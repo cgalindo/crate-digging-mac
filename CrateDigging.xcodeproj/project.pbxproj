@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		29AD49692E6B76B20067529C /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 29AD49682E6B76B20067529C /* XMLCoder */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		293B9BE82DF04EC40052DE8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,9 +28,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		293B9BD72DF04EC30052DE8A /* CrateDigging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = CrateDigging.app; path = "Crate Digging.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = CrateDiggingTests.xctest; path = "Crate Digging.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = CrateDiggingUITests.xctest; path = "Crate Digging.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B9BD72DF04EC30052DE8A /* CrateDigging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CrateDigging.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B9BE72DF04EC40052DE8A /* CrateDigging.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CrateDigging.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B9BF12DF04EC40052DE8A /* CrateDigging.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CrateDigging.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29AD49692E6B76B20067529C /* XMLCoder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +91,8 @@
 			isa = PBXGroup;
 			children = (
 				293B9BD72DF04EC30052DE8A /* CrateDigging.app */,
-				293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */,
-				293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */,
+				293B9BE72DF04EC40052DE8A /* CrateDigging.xctest */,
+				293B9BF12DF04EC40052DE8A /* CrateDigging.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,6 +117,7 @@
 			);
 			name = CrateDigging;
 			packageProductDependencies = (
+				29AD49682E6B76B20067529C /* XMLCoder */,
 			);
 			productName = CrateDigging;
 			productReference = 293B9BD72DF04EC30052DE8A /* CrateDigging.app */;
@@ -137,7 +143,7 @@
 			packageProductDependencies = (
 			);
 			productName = CrateDiggingTests;
-			productReference = 293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */;
+			productReference = 293B9BE72DF04EC40052DE8A /* CrateDigging.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		293B9BF02DF04EC40052DE8A /* CrateDiggingUITests */ = {
@@ -160,7 +166,7 @@
 			packageProductDependencies = (
 			);
 			productName = CrateDiggingUITests;
-			productReference = 293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */;
+			productReference = 293B9BF12DF04EC40052DE8A /* CrateDigging.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 293B9BCE2DF04EC30052DE8A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				29AD49672E6B76B20067529C /* XCRemoteSwiftPackageReference "XMLCoder" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 293B9BD82DF04EC30052DE8A /* Products */;
 			projectDirPath = "";
@@ -401,8 +410,9 @@
 				DEVELOPMENT_TEAM = 6DYTBG2VQS;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+							GENERATE_INFOPLIST_FILE = YES;
+			INFOPLIST_KEY_CFBundleDisplayName = "Crate Digging";
+			INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -410,7 +420,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ChrisGalindo.CrateDigging;
-				PRODUCT_NAME = "Crate Digging";
+				PRODUCT_NAME = "CrateDigging";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -429,8 +439,9 @@
 				DEVELOPMENT_TEAM = 6DYTBG2VQS;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+							GENERATE_INFOPLIST_FILE = YES;
+			INFOPLIST_KEY_CFBundleDisplayName = "Crate Digging";
+			INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -438,7 +449,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ChrisGalindo.CrateDigging;
-				PRODUCT_NAME = "Crate Digging";
+				PRODUCT_NAME = "CrateDigging";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -456,10 +467,10 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.Crate-DiggingTests";
-				PRODUCT_NAME = "Crate Digging";
+				PRODUCT_NAME = "CrateDigging";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Crate Digging.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Crate Digging";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CrateDigging.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CrateDigging";
 			};
 			name = Debug;
 		};
@@ -474,10 +485,10 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.Crate-DiggingTests";
-				PRODUCT_NAME = "Crate Digging";
+				PRODUCT_NAME = "CrateDigging";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Crate Digging.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Crate Digging";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CrateDigging.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CrateDigging";
 			};
 			name = Release;
 		};
@@ -490,7 +501,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.Crate-DiggingUITests";
-				PRODUCT_NAME = "Crate Digging";
+				PRODUCT_NAME = "CrateDigging";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = CrateDigging;
@@ -506,7 +517,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.Crate-DiggingUITests";
-				PRODUCT_NAME = "Crate Digging";
+				PRODUCT_NAME = "CrateDigging";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = CrateDigging;
@@ -553,6 +564,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		29AD49672E6B76B20067529C /* XCRemoteSwiftPackageReference "XMLCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CoreOffice/XMLCoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.17.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		29AD49682E6B76B20067529C /* XMLCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29AD49672E6B76B20067529C /* XCRemoteSwiftPackageReference "XMLCoder" */;
+			productName = XMLCoder;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 293B9BCF2DF04EC30052DE8A /* Project object */;
 }
