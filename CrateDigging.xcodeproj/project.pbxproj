@@ -12,37 +12,37 @@
 			containerPortal = 293B9BCF2DF04EC30052DE8A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 293B9BD62DF04EC30052DE8A;
-			remoteInfo = "CrateDigging";
+			remoteInfo = CrateDigging;
 		};
 		293B9BF22DF04EC40052DE8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 293B9BCF2DF04EC30052DE8A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 293B9BD62DF04EC30052DE8A;
-			remoteInfo = "CrateDigging";
+			remoteInfo = CrateDigging;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		293B9BD72DF04EC30052DE8A /* CrateDigging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CrateDigging.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CrateDiggingTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CrateDiggingUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B9BD72DF04EC30052DE8A /* CrateDigging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = CrateDigging.app; path = "Crate Digging.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = CrateDiggingTests.xctest; path = "Crate Digging.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = CrateDiggingUITests.xctest; path = "Crate Digging.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		293B9BD92DF04EC30052DE8A /* CrateDigging */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "CrateDigging";
+			path = CrateDigging;
 			sourceTree = "<group>";
 		};
 		293B9BEA2DF04EC40052DE8A /* CrateDiggingTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "CrateDiggingTests";
+			path = CrateDiggingTests;
 			sourceTree = "<group>";
 		};
 		293B9BF42DF04EC40052DE8A /* CrateDiggingUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "CrateDiggingUITests";
+			path = CrateDiggingUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -110,10 +110,10 @@
 			fileSystemSynchronizedGroups = (
 				293B9BD92DF04EC30052DE8A /* CrateDigging */,
 			);
-			name = "CrateDigging";
+			name = CrateDigging;
 			packageProductDependencies = (
 			);
-			productName = "CrateDigging";
+			productName = CrateDigging;
 			productReference = 293B9BD72DF04EC30052DE8A /* CrateDigging.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -133,10 +133,10 @@
 			fileSystemSynchronizedGroups = (
 				293B9BEA2DF04EC40052DE8A /* CrateDiggingTests */,
 			);
-			name = "CrateDiggingTests";
+			name = CrateDiggingTests;
 			packageProductDependencies = (
 			);
-			productName = "CrateDiggingTests";
+			productName = CrateDiggingTests;
 			productReference = 293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -156,10 +156,10 @@
 			fileSystemSynchronizedGroups = (
 				293B9BF42DF04EC40052DE8A /* CrateDiggingUITests */,
 			);
-			name = "CrateDiggingUITests";
+			name = CrateDiggingUITests;
 			packageProductDependencies = (
 			);
-			productName = "CrateDiggingUITests";
+			productName = CrateDiggingUITests;
 			productReference = 293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
@@ -394,7 +394,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "CrateDigging/CrateDigging.entitlements";
+				CODE_SIGN_ENTITLEMENTS = CrateDigging/Core/CrateDigging.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -409,7 +409,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.CrateDigging";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ChrisGalindo.CrateDigging;
 				PRODUCT_NAME = "Crate Digging";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -422,7 +422,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "CrateDigging/CrateDigging.entitlements";
+				CODE_SIGN_ENTITLEMENTS = CrateDigging/Core/CrateDigging.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -437,7 +437,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.CrateDigging";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ChrisGalindo.CrateDigging;
 				PRODUCT_NAME = "Crate Digging";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -493,7 +493,7 @@
 				PRODUCT_NAME = "Crate Digging";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "CrateDigging";
+				TEST_TARGET_NAME = CrateDigging;
 			};
 			name = Debug;
 		};
@@ -509,7 +509,7 @@
 				PRODUCT_NAME = "Crate Digging";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "CrateDigging";
+				TEST_TARGET_NAME = CrateDigging;
 			};
 			name = Release;
 		};
