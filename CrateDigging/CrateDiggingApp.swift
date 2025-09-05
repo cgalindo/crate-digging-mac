@@ -1,5 +1,5 @@
 //
-//  Crate_DiggingApp.swift
+//  CrateDiggingApp.swift
 //  Crate Digging
 //
 //  Created by Chris Galindo on 6/4/25.
@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct Crate_DiggingApp: App {
+struct CrateDiggingApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
