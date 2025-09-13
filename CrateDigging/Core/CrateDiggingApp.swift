@@ -25,7 +25,7 @@ struct CrateDiggingApp: App {
 
     var body: some Scene {
         WindowGroup {
-            PlaylistView()
+            HomeView()
         }
 //        .modelContainer(sharedModelContainer)
     }
