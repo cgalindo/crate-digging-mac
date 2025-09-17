@@ -27,6 +27,8 @@ struct CrateDiggingApp: App {
         WindowGroup {
             HomeView()
         }
+        .windowResizability(.contentMinSize)
+        .defaultSize(width: 864, height: 600)
 //        .modelContainer(sharedModelContainer)
     }
 }

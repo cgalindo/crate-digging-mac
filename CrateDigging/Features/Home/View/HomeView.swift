@@ -34,6 +34,7 @@ struct HomeView: View {
             }
             .navigationTitle(viewModel.selectedItem.title)
         }
+        .frame(minWidth: 954, minHeight: 400)
     }
 }
 
