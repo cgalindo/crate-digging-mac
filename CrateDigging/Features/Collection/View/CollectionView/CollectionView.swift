@@ -11,12 +11,11 @@ struct CollectionView: View {
     @State private var viewModel = ViewModel()
     
     var body: some View {
-        ZStack(alignment: .top) {
-            ZStack {
+        GeometryReader { geometry in
+            ZStack(alignment: .top) {
                 switch viewModel.state {
                 case .loading:
-                    ProgressView("Loading collection...")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    AdaptiveProgressView(message: "Loading collection...")
                 case .loaded(let tracks):
                     if tracks.isEmpty {
                         emptyCollectionView
@@ -26,9 +25,9 @@ struct CollectionView: View {
                 case .error(let error):
                     errorView(error: error)
                 }
+                
+                topBar
             }
-            
-            topBar
         }
         .task {
             await viewModel.loadData()

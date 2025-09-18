@@ -1,5 +1,5 @@
 //
-//  MixesView.swift
+//  CratesView.swift
 //  CrateDigging
 //
 //  Created by Chris Galindo on 9/13/25.
@@ -7,24 +7,23 @@
 
 import SwiftUI
 
-struct MixesView: View {
+struct CratesView: View {
     @State private var viewModel = ViewModel()
     
     var body: some View {
         Group {
             switch viewModel.state {
             case .loading:
-                ProgressView("Loading mixes...")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                AdaptiveProgressView(message: "Loading crates...")
             case .loaded(let data):
                 VStack {
-                    Image(systemName: "waveform")
+                    Image(systemName: "shippingbox")
                         .font(.system(size: 60))
                         .foregroundColor(.secondary)
-                    Text("Mixes")
+                    Text("Crates")
                         .font(.title2)
                         .fontWeight(.medium)
-                    Text("Your mixes will appear here")
+                    Text("Your crates will appear here")
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -50,5 +49,5 @@ struct MixesView: View {
 }
 
 #Preview {
-    MixesView()
+    CratesView()
 }

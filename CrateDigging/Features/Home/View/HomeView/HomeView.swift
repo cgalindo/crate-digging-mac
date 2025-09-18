@@ -19,7 +19,6 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationTitle("CrateDigging")
             .navigationSplitViewColumnWidth(min: 200, ideal: 250)
         } detail: {
             Group {
@@ -32,7 +31,6 @@ struct HomeView: View {
                     MixesView()
                 }
             }
-            .navigationTitle(viewModel.selectedItem.title)
         }
         .frame(minWidth: 954, minHeight: 400)
     }
