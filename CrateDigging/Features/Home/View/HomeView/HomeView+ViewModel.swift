@@ -13,6 +13,7 @@ extension HomeView {
     @MainActor
     final class ViewModel {
         var selectedItem: MenuItem = .collection
+        private(set) var filterOptions = FilterOptions()
         
         init() {
             // Collection is the default selected item
