@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "52277459-E17D-4403-BDE0-4A2E330EDAF5",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CrateFoundationTests",
+        "name" : "CrateFoundationTests"
+      }
+    }
+  ],
+  "version" : 1
+}

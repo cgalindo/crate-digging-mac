@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		290781542E851A8C00B45782 /* CrateFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 290781532E851A8C00B45782 /* CrateFoundation */; };
 		29AD49692E6B76B20067529C /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 29AD49682E6B76B20067529C /* XMLCoder */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		290781502E851A0300B45782 /* CrateFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CrateFoundation; sourceTree = "<group>"; };
 		293B9BD72DF04EC30052DE8A /* CrateDigging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrateDigging.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		293B9BE72DF04EC40052DE8A /* CrateDigging.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrateDigging.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		293B9BF12DF04EC40052DE8A /* CrateDigging.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrateDigging.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +59,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29AD49692E6B76B20067529C /* XMLCoder in Frameworks */,
+				290781542E851A8C00B45782 /* CrateFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,12 +80,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		290781512E851A0300B45782 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				290781502E851A0300B45782 /* CrateFoundation */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
 		293B9BCE2DF04EC30052DE8A = {
 			isa = PBXGroup;
 			children = (
 				293B9BD92DF04EC30052DE8A /* CrateDigging */,
 				293B9BEA2DF04EC40052DE8A /* CrateDiggingTests */,
 				293B9BF42DF04EC40052DE8A /* CrateDiggingUITests */,
+				290781512E851A0300B45782 /* Packages */,
 				293B9BD82DF04EC30052DE8A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -118,6 +130,7 @@
 			name = CrateDigging;
 			packageProductDependencies = (
 				29AD49682E6B76B20067529C /* XMLCoder */,
+				290781532E851A8C00B45782 /* CrateFoundation */,
 			);
 			productName = CrateDigging;
 			productReference = 293B9BD72DF04EC30052DE8A /* CrateDigging.app */;
@@ -593,6 +606,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		290781532E851A8C00B45782 /* CrateFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CrateFoundation;
+		};
 		29AD49682E6B76B20067529C /* XMLCoder */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 29AD49672E6B76B20067529C /* XCRemoteSwiftPackageReference "XMLCoder" */;
