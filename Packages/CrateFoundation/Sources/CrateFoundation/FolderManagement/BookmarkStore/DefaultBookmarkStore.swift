@@ -8,22 +8,22 @@
 import Foundation
 
 actor DefaultBookmarkStore: BookmarkStore {
-    private var bookmarks: [String: Data] = [:]
-    
     func getBookmark(for key: String) async throws -> URL {
         guard !key.isEmpty else {
             throw BookmarkError.emptyKey
         }
         
-        guard let bookmarkData = bookmarks[key] else {
+        guard let bookmarkData = UserDefaults.standard.data(forKey: key) else {
             throw BookmarkError.bookmarkNotFound(key)
         }
         
         var isStale = false
-        let url = try URL(resolvingBookmarkData: bookmarkData, 
-                         options: .withSecurityScope, 
-                         relativeTo: nil, 
-                         bookmarkDataIsStale: &isStale)
+        let url = try URL(
+            resolvingBookmarkData: bookmarkData,
+            options: .withSecurityScope,
+            relativeTo: nil,
+            bookmarkDataIsStale: &isStale
+        )
         
         if isStale {
             // Re-save the bookmark if it's stale
@@ -38,10 +38,12 @@ actor DefaultBookmarkStore: BookmarkStore {
             throw BookmarkError.emptyKey
         }
         
-        let bookmarkData = try url.bookmarkData(options: .withSecurityScope, 
-                                              includingResourceValuesForKeys: nil, 
-                                              relativeTo: nil)
-        bookmarks[key] = bookmarkData
+        let bookmarkData = try url.bookmarkData(
+            options: .withSecurityScope,
+            includingResourceValuesForKeys: nil,
+            relativeTo: nil
+        )
+        UserDefaults.standard.set(bookmarkData, forKey: key)
     }
 }
 

@@ -8,7 +8,7 @@
 import Foundation
 
 /// Store for bookmarked URLs.
-public protocol BookmarkStore: Sendable {
+protocol BookmarkStore: Sendable {
     /// Fetch a specific bookmarked URL.
     /// - Parameters:
     ///   - key: Key used to fetch bookmarked URL from the store

@@ -250,4 +250,126 @@ struct DefaultBookmarkStoreTests {
         // Then
         #expect(retrievedURL.standardizedFileURL.path == testURL.standardizedFileURL.path)
     }
+    
+    // MARK: - Bookmark Resolution Error Tests
+    
+    @Test func bookmarkResolutionError() async throws {
+        // Given
+        let testURL = tempDirectory.appendingPathComponent("resolution-error-test")
+        try FileManager.default.createDirectory(at: testURL, withIntermediateDirectories: true)
+        let key = "resolution-error-key"
+        
+        // When - save valid bookmark first
+        try await bookmarkStore.saveBookmark(testURL, for: key)
+        
+        // Corrupt the bookmark data in UserDefaults
+        let corruptedData = Data("corrupted-bookmark-data".utf8)
+        UserDefaults.standard.set(corruptedData, forKey: key)
+        
+        // Then - should throw error when trying to resolve corrupted bookmark
+        await #expect(throws: Error.self) {
+            try await bookmarkStore.getBookmark(for: key)
+        }
+    }
+    
+    // MARK: - Security Scope Resource Management Tests
+    
+    @Test func securityScopeResourceIsProperlyManaged() async throws {
+        // Given
+        let testURL = tempDirectory.appendingPathComponent("security-management-test")
+        try FileManager.default.createDirectory(at: testURL, withIntermediateDirectories: true)
+        let key = "security-management-key"
+        
+        // When
+        try await bookmarkStore.saveBookmark(testURL, for: key)
+        let retrievedURL = try await bookmarkStore.getBookmark(for: key)
+        
+        // Then - should be able to access and stop accessing security scoped resource
+        #expect(retrievedURL.startAccessingSecurityScopedResource())
+        retrievedURL.stopAccessingSecurityScopedResource()
+        
+        // Verify we can access it again
+        #expect(retrievedURL.startAccessingSecurityScopedResource())
+        retrievedURL.stopAccessingSecurityScopedResource()
+    }
+    
+    @Test func multipleSecurityScopeAccesses() async throws {
+        // Given
+        let testURL = tempDirectory.appendingPathComponent("multiple-security-test")
+        try FileManager.default.createDirectory(at: testURL, withIntermediateDirectories: true)
+        let key = "multiple-security-key"
+        
+        // When
+        try await bookmarkStore.saveBookmark(testURL, for: key)
+        let retrievedURL1 = try await bookmarkStore.getBookmark(for: key)
+        let retrievedURL2 = try await bookmarkStore.getBookmark(for: key)
+        
+        // Then - both URLs should be accessible independently
+        #expect(retrievedURL1.startAccessingSecurityScopedResource())
+        #expect(retrievedURL2.startAccessingSecurityScopedResource())
+        
+        retrievedURL1.stopAccessingSecurityScopedResource()
+        retrievedURL2.stopAccessingSecurityScopedResource()
+    }
+    
+    // MARK: - UserDefaults Integration Tests
+    
+    @Test func bookmarkDataIsStoredInUserDefaults() async throws {
+        // Given
+        let testURL = tempDirectory.appendingPathComponent("userdefaults-test")
+        try FileManager.default.createDirectory(at: testURL, withIntermediateDirectories: true)
+        let key = "userdefaults-key"
+        
+        // When
+        try await bookmarkStore.saveBookmark(testURL, for: key)
+        
+        // Then - data should be stored in UserDefaults
+        let storedData = UserDefaults.standard.data(forKey: key)
+        #expect(storedData != nil)
+        #expect(storedData!.count > 0)
+    }
+    
+    @Test func bookmarkDataIsRetrievedFromUserDefaults() async throws {
+        // Given
+        let testURL = tempDirectory.appendingPathComponent("userdefaults-retrieval-test")
+        try FileManager.default.createDirectory(at: testURL, withIntermediateDirectories: true)
+        let key = "userdefaults-retrieval-key"
+        
+        // When
+        try await bookmarkStore.saveBookmark(testURL, for: key)
+        
+        // Clear UserDefaults to simulate fresh app launch
+        UserDefaults.standard.removeObject(forKey: key)
+        
+        // Then - should throw error when bookmark is not found
+        await #expect(throws: BookmarkError.bookmarkNotFound(key)) {
+            try await bookmarkStore.getBookmark(for: key)
+        }
+    }
+    
+    // MARK: - Actor Concurrency Tests
+    
+    @Test func actorIsolation() async throws {
+        // Given
+        let testURL = tempDirectory.appendingPathComponent("actor-isolation-test")
+        try FileManager.default.createDirectory(at: testURL, withIntermediateDirectories: true)
+        let key = "actor-isolation-key"
+        
+        // When - multiple concurrent operations on the same actor
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask {
+                try? await self.bookmarkStore.saveBookmark(testURL, for: key)
+            }
+            group.addTask {
+                _ = try? await self.bookmarkStore.getBookmark(for: key)
+            }
+            group.addTask {
+                try? await self.bookmarkStore.saveBookmark(testURL, for: "\(key)-2")
+            }
+        }
+        
+        // Then - should be able to retrieve the bookmark
+        let retrievedURL = try await bookmarkStore.getBookmark(for: key)
+        #expect(retrievedURL.standardizedFileURL.path == testURL.standardizedFileURL.path)
+    }
 }
