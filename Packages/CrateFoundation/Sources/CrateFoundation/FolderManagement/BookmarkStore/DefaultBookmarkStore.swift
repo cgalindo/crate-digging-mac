@@ -9,10 +9,6 @@ import Foundation
 
 actor DefaultBookmarkStore: BookmarkStore {
     func getBookmark(for key: String) async throws -> URL {
-        guard !key.isEmpty else {
-            throw BookmarkError.emptyKey
-        }
-        
         guard let bookmarkData = UserDefaults.standard.data(forKey: key) else {
             throw BookmarkError.bookmarkNotFound(key)
         }

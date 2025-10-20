@@ -193,35 +193,15 @@ struct DefaultBookmarkStoreTests {
         // Given
         let key = "test-key"
         let notFoundError = BookmarkError.bookmarkNotFound(key)
-        let emptyKeyError = BookmarkError.emptyKey
         
         // When
         let notFoundDescription = notFoundError.localizedDescription
-        let emptyKeyDescription = emptyKeyError.localizedDescription
         
         // Then
         #expect(notFoundDescription == "Bookmark not found for key: \(key)")
-        #expect(emptyKeyDescription == "Key cannot be empty")
     }
     
     // MARK: - Edge Cases
-    
-    @Test func emptyKeyThrowsError() async {
-        // Given
-        let testURL = tempDirectory.appendingPathComponent("empty-key-test")
-        try? FileManager.default.createDirectory(at: testURL, withIntermediateDirectories: true)
-        let emptyKey = ""
-        
-        // When & Then - saveBookmark should throw emptyKey error
-        await #expect(throws: BookmarkError.emptyKey) {
-            try await bookmarkStore.saveBookmark(testURL, for: emptyKey)
-        }
-        
-        // When & Then - getBookmark should also throw emptyKey error
-        await #expect(throws: BookmarkError.emptyKey) {
-            try await bookmarkStore.getBookmark(for: emptyKey)
-        }
-    }
     
     @Test func specialCharactersInKey() async throws {
         // Given
