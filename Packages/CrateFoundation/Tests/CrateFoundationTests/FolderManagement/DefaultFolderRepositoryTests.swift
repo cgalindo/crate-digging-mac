@@ -1,5 +1,5 @@
 //
-//  TraktorFolderRepositoryTests.swift
+//  DefaultFolderRepositoryTests.swift
 //  CrateFoundation
 //
 //  Created by Chris Galindo on 10/19/25.
@@ -9,14 +9,14 @@ import Foundation
 import Testing
 @testable import CrateFoundation
 
-struct TraktorFolderRepositoryTests {
+struct DefaultFolderRepositoryTests {
     
     // MARK: - Save Bookmark Tests
     
     @Test func saveBookmarkSuccess() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let testURL = URL(fileURLWithPath: "/test/path")
         let testKey = "test-key"
         let bookmark = Bookmark(url: testURL, key: testKey)
@@ -32,7 +32,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveBookmarkWithMultipleBookmarks() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let bookmark1 = Bookmark(url: URL(fileURLWithPath: "/test/path1"), key: "key1")
         let bookmark2 = Bookmark(url: URL(fileURLWithPath: "/test/path2"), key: "key2")
         
@@ -49,7 +49,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveBookmarkOverwritesExisting() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let originalURL = URL(fileURLWithPath: "/original/path")
         let newURL = URL(fileURLWithPath: "/new/path")
         let key = "overwrite-key"
@@ -69,7 +69,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveBookmarkPropagatesError() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let testError = BookmarkError.emptyKey
         let bookmark = Bookmark(url: URL(fileURLWithPath: "/test/path"), key: "test-key")
         
@@ -84,7 +84,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveBookmarkWithEmptyKey() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let bookmark = Bookmark(url: URL(fileURLWithPath: "/test/path"), key: "")
         
         await mockBookmarkStore.setShouldThrowError(true, error: BookmarkError.emptyKey)
@@ -100,7 +100,7 @@ struct TraktorFolderRepositoryTests {
     @Test func fetchBookmarkSuccess() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let testURL = URL(fileURLWithPath: "/test/path")
         let testKey = "test-key"
         
@@ -117,7 +117,7 @@ struct TraktorFolderRepositoryTests {
     @Test func fetchBookmarkWithMultipleKeys() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let url1 = URL(fileURLWithPath: "/test/path1")
         let url2 = URL(fileURLWithPath: "/test/path2")
         let key1 = "key1"
@@ -139,7 +139,7 @@ struct TraktorFolderRepositoryTests {
     @Test func fetchBookmarkThrowsErrorForNonExistentKey() async {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let nonExistentKey = "non-existent-key"
         
         // When & Then
@@ -151,7 +151,7 @@ struct TraktorFolderRepositoryTests {
     @Test func fetchBookmarkPropagatesError() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let testError = BookmarkError.emptyKey
         let testKey = "test-key"
         
@@ -168,7 +168,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveAndFetchBookmarkRoundTrip() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let testURL = URL(fileURLWithPath: "/test/roundtrip/path")
         let testKey = "roundtrip-key"
         let bookmark = Bookmark(url: testURL, key: testKey)
@@ -184,7 +184,7 @@ struct TraktorFolderRepositoryTests {
     @Test func multipleSaveAndFetchOperations() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let bookmarks = (0..<5).map { index in
             Bookmark(url: URL(fileURLWithPath: "/test/path\(index)"), key: "key\(index)")
         }
@@ -208,7 +208,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveBookmarkWithSpecialCharactersInKey() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let specialKey = "key-with-special-chars!@#$%^&*()"
         let testURL = URL(fileURLWithPath: "/test/special/path")
         let bookmark = Bookmark(url: testURL, key: specialKey)
@@ -225,7 +225,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveBookmarkWithLongKey() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let longKey = String(repeating: "a", count: 1000)
         let testURL = URL(fileURLWithPath: "/test/long/path")
         let bookmark = Bookmark(url: testURL, key: longKey)
@@ -242,7 +242,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveBookmarkWithComplexURL() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let complexURL = URL(string: "file:///Users/test/Documents/My%20Music%20Collection/2024/January%2015th/")!
         let testKey = "complex-url-key"
         let bookmark = Bookmark(url: complexURL, key: testKey)
@@ -261,7 +261,7 @@ struct TraktorFolderRepositoryTests {
     @Test func concurrentSaveOperations() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let bookmarks = (0..<10).map { index in
             Bookmark(url: URL(fileURLWithPath: "/concurrent/path\(index)"), key: "concurrent-key\(index)")
         }
@@ -288,7 +288,7 @@ struct TraktorFolderRepositoryTests {
     @Test func concurrentSaveAndFetchOperations() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let bookmarks = (0..<5).map { index in
             Bookmark(url: URL(fileURLWithPath: "/mixed/path\(index)"), key: "mixed-key\(index)")
         }
@@ -326,7 +326,7 @@ struct TraktorFolderRepositoryTests {
     @Test func saveBookmarkRecoversFromError() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let testError = BookmarkError.emptyKey
         let bookmark = Bookmark(url: URL(fileURLWithPath: "/test/path"), key: "test-key")
         
@@ -346,7 +346,7 @@ struct TraktorFolderRepositoryTests {
     @Test func fetchBookmarkRecoversFromError() async throws {
         // Given
         let mockBookmarkStore = DefaultBookmarkStoreMock()
-        let repository = TraktorFolderRepository(bookmarkStore: mockBookmarkStore)
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
         let testURL = URL(fileURLWithPath: "/test/path")
         let testKey = "test-key"
         
@@ -365,3 +365,4 @@ struct TraktorFolderRepositoryTests {
         #expect(result == testURL.absoluteString)
     }
 }
+

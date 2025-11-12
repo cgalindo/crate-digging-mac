@@ -12,6 +12,7 @@ enum MenuItem: String, CaseIterable {
     case collection = "Collection"
     case crates = "Crates"
     case mixes = "Mixes"
+    case settings = "Settings"
     
     var title: String {
         return self.rawValue
@@ -25,6 +26,8 @@ enum MenuItem: String, CaseIterable {
             return "shippingbox"
         case .mixes:
             return "waveform"
+        case .settings:
+            return "gearshape"
         }
     }
 }

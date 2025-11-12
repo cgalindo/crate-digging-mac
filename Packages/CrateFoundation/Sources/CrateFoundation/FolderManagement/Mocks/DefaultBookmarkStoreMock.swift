@@ -6,9 +6,8 @@
 //
 
 import Foundation
-@testable import CrateFoundation
 
-/// Black box mock implementation of BookmarkStore for testing TraktorFolderRepository
+/// Black box mock implementation of BookmarkStore for testing DefaultFolderRepository
 actor DefaultBookmarkStoreMock: BookmarkStore {
     private var bookmarks: [String: URL] = [:]
     private var shouldThrowError: Bool = false
@@ -32,6 +31,18 @@ actor DefaultBookmarkStoreMock: BookmarkStore {
         }
         
         bookmarks[key] = url
+    }
+    
+    func removeBookmark(for key: String) async throws {
+        if shouldThrowError {
+            throw errorToThrow
+        }
+        
+        guard bookmarks[key] != nil else {
+            throw BookmarkError.bookmarkNotFound(key)
+        }
+        
+        bookmarks.removeValue(forKey: key)
     }
     
     // MARK: - Test Control Methods

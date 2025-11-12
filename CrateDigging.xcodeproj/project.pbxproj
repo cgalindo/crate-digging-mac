@@ -31,8 +31,8 @@
 /* Begin PBXFileReference section */
 		290781502E851A0300B45782 /* CrateFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CrateFoundation; sourceTree = "<group>"; };
 		293B9BD72DF04EC30052DE8A /* CrateDigging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrateDigging.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		293B9BE72DF04EC40052DE8A /* CrateDigging.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrateDigging.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		293B9BF12DF04EC40052DE8A /* CrateDigging.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrateDigging.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrateDiggingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrateDiggingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -103,8 +103,8 @@
 			isa = PBXGroup;
 			children = (
 				293B9BD72DF04EC30052DE8A /* CrateDigging.app */,
-				293B9BE72DF04EC40052DE8A /* CrateDigging.xctest */,
-				293B9BF12DF04EC40052DE8A /* CrateDigging.xctest */,
+				293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */,
+				293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,7 +156,7 @@
 			packageProductDependencies = (
 			);
 			productName = CrateDiggingTests;
-			productReference = 293B9BE72DF04EC40052DE8A /* CrateDigging.xctest */;
+			productReference = 293B9BE72DF04EC40052DE8A /* CrateDiggingTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		293B9BF02DF04EC40052DE8A /* CrateDiggingUITests */ = {
@@ -179,7 +179,7 @@
 			packageProductDependencies = (
 			);
 			productName = CrateDiggingUITests;
-			productReference = 293B9BF12DF04EC40052DE8A /* CrateDigging.xctest */;
+			productReference = 293B9BF12DF04EC40052DE8A /* CrateDiggingUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -493,7 +493,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.Crate-DiggingTests";
-				PRODUCT_NAME = CrateDigging;
+				PRODUCT_MODULE_NAME = CrateDiggingTests;
+				PRODUCT_NAME = CrateDiggingTests;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CrateDigging.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CrateDigging";
@@ -512,7 +513,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.Crate-DiggingTests";
-				PRODUCT_NAME = CrateDigging;
+				PRODUCT_MODULE_NAME = CrateDiggingTests;
+				PRODUCT_NAME = CrateDiggingTests;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CrateDigging.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CrateDigging";
@@ -529,10 +531,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.Crate-DiggingUITests";
-				PRODUCT_NAME = CrateDigging;
+				PRODUCT_MODULE_NAME = CrateDiggingUITests;
+				PRODUCT_NAME = CrateDiggingUITests;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = CrateDigging;
+				TEST_TARGET_NAME = CrateDiggingUITests;
 			};
 			name = Debug;
 		};
@@ -546,10 +549,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ChrisGalindo.Crate-DiggingUITests";
-				PRODUCT_NAME = CrateDigging;
+				PRODUCT_MODULE_NAME = CrateDiggingUITests;
+				PRODUCT_NAME = CrateDiggingUITests;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = CrateDigging;
+				TEST_TARGET_NAME = CrateDiggingUITests;
 			};
 			name = Release;
 		};

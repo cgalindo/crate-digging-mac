@@ -49,6 +49,8 @@ struct HomeView: View {
                     CratesView()
                 case .mixes:
                     MixesView()
+                case .settings:
+                    SettingsView()
                 }
             }
         }

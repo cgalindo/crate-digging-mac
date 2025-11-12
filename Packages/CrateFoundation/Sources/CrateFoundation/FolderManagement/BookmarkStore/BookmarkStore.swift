@@ -19,4 +19,9 @@ protocol BookmarkStore: Sendable {
     ///   - url: Bookmarked URL  to store.
     ///   - key: Key used to identify URL.
     func saveBookmark(_ url: URL, for key: String) async throws
+    
+    /// Removes a bookmarked URL.
+    /// - Parameters:
+    ///   - key: Key used to indentify URL.
+    func removeBookmark(for key: String) async throws
 }

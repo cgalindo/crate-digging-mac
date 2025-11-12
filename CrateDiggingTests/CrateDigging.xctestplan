@@ -1,0 +1,47 @@
+{
+  "configurations" : [
+    {
+      "id" : "1C341B6F-C77C-4FFA-A6B6-B94FB842C35B",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:CrateDigging.xcodeproj",
+          "identifier" : "293B9BD62DF04EC30052DE8A",
+          "name" : "CrateDigging"
+        }
+      ]
+    },
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:CrateDigging.xcodeproj",
+      "identifier" : "293B9BD62DF04EC30052DE8A",
+      "name" : "CrateDigging"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:CrateDigging.xcodeproj",
+        "identifier" : "293B9BE62DF04EC40052DE8A",
+        "name" : "CrateDiggingTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:CrateDigging.xcodeproj",
+        "identifier" : "293B9BF02DF04EC40052DE8A",
+        "name" : "CrateDiggingUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

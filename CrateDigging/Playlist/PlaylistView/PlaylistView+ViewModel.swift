@@ -17,6 +17,7 @@ extension PlaylistView {
     }
     
     @Observable
+    @MainActor
     final class ViewModel {
         
         var state: state = .noPlaylists

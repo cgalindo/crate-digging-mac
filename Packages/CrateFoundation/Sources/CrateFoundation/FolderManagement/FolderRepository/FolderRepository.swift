@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Handles folder management for Traktor collection.
+/// Handles folder management for music software collection.
 public protocol FolderRepository: Sendable {
     
     func save(_ bookmark: Bookmark) async throws

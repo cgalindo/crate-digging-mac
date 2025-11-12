@@ -17,7 +17,7 @@ extension HomeView {
         
         init() {
             // Collection is the default selected item
-            selectedItem = .collection
+            selectedItem = .settings
         }
     }
     
