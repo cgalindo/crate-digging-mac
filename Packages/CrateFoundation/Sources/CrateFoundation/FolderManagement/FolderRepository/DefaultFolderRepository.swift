@@ -37,5 +37,15 @@ public struct DefaultFolderRepository: FolderRepository {
     public func fetchBookmark(for key: String) async throws -> String {
         return try await bookmarkStore.getBookmark(for: key).absoluteString
     }
+    
+    public func removeBookmark(for key: String) async throws {
+        do {
+            try await bookmarkStore.removeBookmark(for: key)
+            Logger.folderManagement.debug("Successfully removed bookmark.")
+        } catch {
+            Logger.folderManagement.error("Failed to remove bookmark: \(error)")
+            throw error
+        }
+    }
 }
 

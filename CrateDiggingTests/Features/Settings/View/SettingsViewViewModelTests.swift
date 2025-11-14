@@ -75,7 +75,7 @@ struct SettingsViewViewModelTests {
         
         let folderPanel = FolderPanelMock { panelItem in
             #expect(panelItem.storeKey == TraktorPanelItem.rootFolder.storeKey)
-            await repository.setBookmark(rootURL.absoluteString, for: panelItem.storeKey)
+            return rootURL
         }
         
         let rootUseCase = RootFolderUseCaseMock { url in
@@ -538,5 +538,312 @@ struct SettingsViewViewModelTests {
         
         // Then - empty string is not nil, so it should return primary
         #expect(color == .primary)
+    }
+    
+    // MARK: - Error Handling
+    
+    @Test func changeFolderHandlesUserCancellation() async throws {
+        // Given
+        let repository = FolderRepositoryMock()
+        let folderPanel = FolderPanelMock { _ in
+            return nil // User cancelled
+        }
+        
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: repository,
+            folderPanel: folderPanel,
+            rootFolderUseCase: RootFolderUseCaseMock()
+        )
+        
+        guard let rootSetting = viewModel.folderSettings.first(where: { $0.panelItem == .rootFolder }) else {
+            Issue.record("Root setting not initialized")
+            return
+        }
+        
+        // When
+        await viewModel.changeFolder(for: rootSetting)
+        
+        // Then - No bookmarks should be saved
+        #expect(await repository.getStoredBookmarkCount() == 0)
+    }
+    
+    @Test func changeFolderHandlesBookmarkSaveError() async throws {
+        // Given
+        let repository = FolderRepositoryMock()
+        await repository.setShouldThrowError(true, error: BookmarkError.emptyKey)
+        
+        let selectedURL = URL(fileURLWithPath: "/test/folder")
+        let folderPanel = FolderPanelMock { _ in
+            return selectedURL
+        }
+        
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: repository,
+            folderPanel: folderPanel,
+            rootFolderUseCase: RootFolderUseCaseMock()
+        )
+        
+        guard let rootSetting = viewModel.folderSettings.first(where: { $0.panelItem == .rootFolder }) else {
+            Issue.record("Root setting not initialized")
+            return
+        }
+        
+        // When
+        await viewModel.changeFolder(for: rootSetting)
+        
+        // Then - Error message should be set
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.errorMessage?.contains("empty") == true || viewModel.errorMessage?.contains("key") == true)
+    }
+    
+    @Test func changeFolderHandlesTraktorRootFolderErrorNoVersionsFound() async throws {
+        // Given
+        let repository = FolderRepositoryMock()
+        let selectedURL = URL(fileURLWithPath: "/test/folder")
+        
+        let folderPanel = FolderPanelMock { _ in
+            return selectedURL
+        }
+        
+        let rootUseCase = RootFolderUseCaseMock { _ in
+            throw TraktorRootFolderError.noTraktorVersionsFound
+        }
+        
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: repository,
+            folderPanel: folderPanel,
+            rootFolderUseCase: rootUseCase
+        )
+        
+        guard let rootSetting = viewModel.folderSettings.first(where: { $0.panelItem == .rootFolder }) else {
+            Issue.record("Root setting not initialized")
+            return
+        }
+        
+        // When
+        await viewModel.changeFolder(for: rootSetting)
+        
+        // Then - Root folder bookmark should be cleared
+        #expect(await repository.hasBookmark(for: TraktorPanelItem.rootFolder.storeKey) == false)
+        
+        // Error message should be set
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.errorMessage?.contains("No Traktor version folders") == true)
+        
+        // Root folder path should be cleared
+        let rootPath = viewModel.folderSettings.first(where: { $0.panelItem == .rootFolder })?.path
+        #expect(rootPath == nil)
+    }
+    
+    @Test func changeFolderHandlesTraktorRootFolderErrorHistoryNotFound() async throws {
+        // Given
+        let repository = FolderRepositoryMock()
+        let selectedURL = URL(fileURLWithPath: "/test/folder")
+        
+        let folderPanel = FolderPanelMock { _ in
+            return selectedURL
+        }
+        
+        let rootUseCase = RootFolderUseCaseMock { _ in
+            throw TraktorRootFolderError.historyFolderNotFound
+        }
+        
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: repository,
+            folderPanel: folderPanel,
+            rootFolderUseCase: rootUseCase
+        )
+        
+        guard let rootSetting = viewModel.folderSettings.first(where: { $0.panelItem == .rootFolder }) else {
+            Issue.record("Root setting not initialized")
+            return
+        }
+        
+        // When
+        await viewModel.changeFolder(for: rootSetting)
+        
+        // Then - Root folder bookmark should be cleared
+        #expect(await repository.hasBookmark(for: TraktorPanelItem.rootFolder.storeKey) == false)
+        
+        // Error message should be set
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.errorMessage?.contains("History folder not found") == true)
+    }
+    
+    @Test func changeFolderHandlesTraktorRootFolderErrorCollectionNotFound() async throws {
+        // Given
+        let repository = FolderRepositoryMock()
+        let selectedURL = URL(fileURLWithPath: "/test/folder")
+        
+        let folderPanel = FolderPanelMock { _ in
+            return selectedURL
+        }
+        
+        let rootUseCase = RootFolderUseCaseMock { _ in
+            throw TraktorRootFolderError.collectionFileNotFound
+        }
+        
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: repository,
+            folderPanel: folderPanel,
+            rootFolderUseCase: rootUseCase
+        )
+        
+        guard let rootSetting = viewModel.folderSettings.first(where: { $0.panelItem == .rootFolder }) else {
+            Issue.record("Root setting not initialized")
+            return
+        }
+        
+        // When
+        await viewModel.changeFolder(for: rootSetting)
+        
+        // Then - Root folder bookmark should be cleared
+        #expect(await repository.hasBookmark(for: TraktorPanelItem.rootFolder.storeKey) == false)
+        
+        // Error message should be set
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.errorMessage?.contains("Collection file") == true)
+    }
+    
+    @Test func changeFolderHandlesOtherRootFolderUseCaseErrors() async throws {
+        // Given
+        let repository = FolderRepositoryMock()
+        let selectedURL = URL(fileURLWithPath: "/test/folder")
+        let testError = NSError(domain: "TestError", code: 1, userInfo: nil)
+        
+        let folderPanel = FolderPanelMock { _ in
+            return selectedURL
+        }
+        
+        let rootUseCase = RootFolderUseCaseMock { _ in
+            throw testError
+        }
+        
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: repository,
+            folderPanel: folderPanel,
+            rootFolderUseCase: rootUseCase
+        )
+        
+        guard let rootSetting = viewModel.folderSettings.first(where: { $0.panelItem == .rootFolder }) else {
+            Issue.record("Root setting not initialized")
+            return
+        }
+        
+        // When
+        await viewModel.changeFolder(for: rootSetting)
+        
+        // Then - Root folder bookmark should be cleared
+        #expect(await repository.hasBookmark(for: TraktorPanelItem.rootFolder.storeKey) == false)
+    }
+    
+    @Test func changeFolderHandlesNonRootFolderSelection() async throws {
+        // Given
+        let repository = FolderRepositoryMock()
+        let selectedURL = URL(fileURLWithPath: "/test/history")
+        
+        let folderPanel = FolderPanelMock { _ in
+            return selectedURL
+        }
+        
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: repository,
+            folderPanel: folderPanel,
+            rootFolderUseCase: RootFolderUseCaseMock()
+        )
+        
+        guard let historySetting = viewModel.folderSettings.first(where: { $0.panelItem == .historyFolder }) else {
+            Issue.record("History setting not initialized")
+            return
+        }
+        
+        // When
+        await viewModel.changeFolder(for: historySetting)
+        
+        // Then - History bookmark should be saved
+        #expect(await repository.hasBookmark(for: TraktorPanelItem.historyFolder.storeKey) == true)
+        
+        // Root folder use case should not be called
+        #expect(await folderPanel.shownStoreKeys() == [TraktorPanelItem.historyFolder.storeKey])
+    }
+    
+    @Test func loadFolderPathsHandlesInvalidURLString() async throws {
+        // Given
+        let repository = FolderRepositoryMock()
+        // Set an invalid URL string (not a valid URL)
+        await repository.setBookmark("not a valid url", for: TraktorPanelItem.rootFolder.storeKey)
+        
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: repository,
+            folderPanel: FolderPanelMock(),
+            rootFolderUseCase: RootFolderUseCaseMock()
+        )
+        
+        // When
+        await viewModel.loadData()
+        
+        // Then - Path should be nil for invalid URL
+        let rootPath = viewModel.folderSettings.first(where: { $0.panelItem == .rootFolder })?.path
+        #expect(rootPath == nil)
+    }
+    
+    @Test func clearErrorMessageClearsError() {
+        // Given
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: FolderRepositoryMock(),
+            folderPanel: FolderPanelMock(),
+            rootFolderUseCase: RootFolderUseCaseMock()
+        )
+        
+        viewModel.errorMessage = "Test error"
+        #expect(viewModel.errorMessage != nil)
+        
+        // When
+        viewModel.clearErrorMessage()
+        
+        // Then
+        #expect(viewModel.errorMessage == nil)
+    }
+    
+    @Test func isRootFolderReturnsTrueForRootFolder() {
+        // Given
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: FolderRepositoryMock(),
+            folderPanel: FolderPanelMock(),
+            rootFolderUseCase: RootFolderUseCaseMock()
+        )
+        
+        let rootSetting = FolderSetting(
+            title: "Root Folder",
+            path: nil,
+            panelItem: .rootFolder
+        )
+        
+        // When
+        let isRoot = viewModel.isRootFolder(rootSetting)
+        
+        // Then
+        #expect(isRoot == true)
+    }
+    
+    @Test func isRootFolderReturnsFalseForNonRootFolder() {
+        // Given
+        let viewModel = SettingsView.ViewModel(
+            folderRepository: FolderRepositoryMock(),
+            folderPanel: FolderPanelMock(),
+            rootFolderUseCase: RootFolderUseCaseMock()
+        )
+        
+        let historySetting = FolderSetting(
+            title: "History Folder",
+            path: nil,
+            panelItem: .historyFolder
+        )
+        
+        // When
+        let isRoot = viewModel.isRootFolder(historySetting)
+        
+        // Then
+        #expect(isRoot == false)
     }
 }

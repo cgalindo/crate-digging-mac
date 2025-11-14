@@ -13,4 +13,6 @@ public protocol FolderRepository: Sendable {
     func save(_ bookmark: Bookmark) async throws
     
     func fetchBookmark(for key: String) async throws -> String
+    
+    func removeBookmark(for key: String) async throws
 }

@@ -260,7 +260,7 @@ struct TraktorRootFolderUseCaseTests {
     
     // MARK: - Edge Cases
     
-    @Test func handlesEmptyRootFolder() async throws {
+    @Test func throwsErrorWhenNoTraktorVersionsFound() async throws {
         // Given
         let rootFolder = URL(fileURLWithPath: "/test/root")
         
@@ -279,10 +279,12 @@ struct TraktorRootFolderUseCaseTests {
             fileSystem: fileSystemMock
         )
         
-        // When - Should return early when no versions found
-        try await useCase(rootFolder)
+        // When & Then - Should throw error when no versions found
+        await #expect(throws: TraktorRootFolderError.noTraktorVersionsFound) {
+            try await useCase(rootFolder)
+        }
         
-        // Then - No bookmarks should be saved
+        // Verify no bookmarks were saved
         #expect(await bookmarkStoreMock.getStoredBookmarkCount() == 0)
     }
     

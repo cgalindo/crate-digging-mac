@@ -33,10 +33,15 @@ struct TraktorRootFolderUseCase: RootFolderUseCase {
         // Save versions to UserDefaults
         try saveVersions(versions)
         
+        // Verify that Traktor versions were found
+        guard !versions.isEmpty else {
+            throw TraktorRootFolderError.noTraktorVersionsFound
+        }
+        
         // Get selected version - use the one from UserDefaults or default to latest
         let selectedVersionId = loadSelectedVersionId() ?? versions.max()?.id
         guard let selectedVersion = versions.first(where: { $0.id == selectedVersionId }) ?? versions.max() ?? versions.first else {
-            return
+            throw TraktorRootFolderError.noTraktorVersionsFound
         }
         
         // Build paths for history and collection
@@ -139,11 +144,14 @@ struct TraktorRootFolderUseCase: RootFolderUseCase {
 }
 
 enum TraktorRootFolderError: LocalizedError {
+    case noTraktorVersionsFound
     case historyFolderNotFound
     case collectionFileNotFound
     
     var errorDescription: String? {
         switch self {
+        case .noTraktorVersionsFound:
+            return "No Traktor version folders found in the selected root folder"
         case .historyFolderNotFound:
             return "History folder not found in the selected root folder"
         case .collectionFileNotFound:

@@ -26,6 +26,18 @@ struct SettingsView: View {
         .task {
             await viewModel.loadData()
         }
+        .alert("Error", isPresented: .init(
+            get: { viewModel.errorMessage != nil },
+            set: { if !$0 { viewModel.clearErrorMessage() } }
+        )) {
+            Button("OK") {
+                viewModel.clearErrorMessage()
+            }
+        } message: {
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+            }
+        }
     }
 }
 

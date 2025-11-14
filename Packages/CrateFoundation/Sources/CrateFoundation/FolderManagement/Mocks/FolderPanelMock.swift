@@ -10,16 +10,16 @@ import Foundation
 /// Black box mock implementation of FolderPanelProtocol for testing
 @MainActor
 final class FolderPanelMock: FolderPanelProtocol {
-    private let handler: (@Sendable (PanelItem) async throws -> Void)?
+    private let handler: (@Sendable (PanelItem) async -> URL?)?
     private var calls: [String] = []
     
-    init(handler: (@Sendable (PanelItem) async throws -> Void)? = nil) {
+    init(handler: (@Sendable (PanelItem) async -> URL?)? = nil) {
         self.handler = handler
     }
     
-    func showPanel(for panelItem: PanelItem) async throws {
+    func showPanel(for panelItem: PanelItem) async -> URL? {
         calls.append(panelItem.storeKey)
-        try await handler?(panelItem)
+        return await handler?(panelItem)
     }
     
     func shownStoreKeys() -> [String] {

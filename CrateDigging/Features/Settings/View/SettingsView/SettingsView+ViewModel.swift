@@ -15,6 +15,7 @@ extension SettingsView {
     @MainActor
     final class ViewModel {
         var folderSettings: [FolderSetting] = []
+        var errorMessage: String?
         
         private let folderRepository: any FolderRepository
         private let folderPanel: any FolderPanelProtocol
@@ -23,12 +24,12 @@ extension SettingsView {
         
         init(
             folderRepository: any FolderRepository = DefaultFolderRepository(),
-            folderPanel: (any FolderPanelProtocol)? = nil,
+            folderPanel: any FolderPanelProtocol = FolderPanel(),
             rootFolderUseCase: (any RootFolderUseCase)? = nil,
             clearAllDataUseCase: (any ClearAllDataUseCase)? = nil
         ) {
             self.folderRepository = folderRepository
-            self.folderPanel = folderPanel ?? FolderPanel(repository: folderRepository)
+            self.folderPanel = folderPanel
             self.rootFolderUseCase = rootFolderUseCase ?? TraktorRootFolderUseCase(folderRepository: folderRepository)
             self.clearAllDataUseCase = clearAllDataUseCase ?? DefaultClearAllDataUseCase(
                 bookmarkKeys: TraktorPanelItem.allCases.map(\.storeKey),
@@ -57,7 +58,9 @@ extension SettingsView {
             for (index, setting) in updatedSettings.enumerated() {
                 do {
                     let urlString = try await folderRepository.fetchBookmark(for: setting.panelItem.storeKey)
-                    guard let url = URL(string: urlString) else {
+                    guard let url = URL(string: urlString),
+                          url.scheme != nil
+                    else {
                         updatedSettings[index].path = nil
                         continue
                     }
@@ -72,28 +75,50 @@ extension SettingsView {
         }
         
         func changeFolder(for setting: FolderSetting) async {
-            do {
-                try await folderPanel.showPanel(for: setting.panelItem)
-                
-                // If root folder was selected, process it to bookmark history and collection
-                if isRootFolder(setting) {
-                    // Get the root folder URL that was just saved
-                    let rootFolderString = try await folderRepository.fetchBookmark(for: TraktorPanelItem.rootFolder.storeKey)
-                    guard let rootFolderURL = URL(string: rootFolderString) else {
-                        await loadFolderPaths()
-                        return
-                    }
-                    
-                    // Process root folder to find versions and bookmark history/collection
-                    try await rootFolderUseCase(rootFolderURL)
-                }
-                
-                // Reload all paths after saving
-                await loadFolderPaths()
-            } catch {
-                // User cancelled or error occurred - still reload to ensure UI is in sync
-                await loadFolderPaths()
+            // Show panel and get selected URL
+            guard let selectedURL = await folderPanel.showPanel(for: setting.panelItem) else {
+                // User cancelled - no action needed
+                return
             }
+            
+            // Save the bookmark
+            let bookmark = Bookmark(url: selectedURL, key: setting.panelItem.storeKey)
+            do {
+                try await folderRepository.save(bookmark)
+            } catch {
+                // Set error message for display
+                errorMessage = error.localizedDescription
+                
+                // Error saving bookmark - reload to ensure UI is in sync
+                await loadFolderPaths()
+                return
+            }
+            
+            // If root folder was selected, process it to bookmark history and collection
+            if isRootFolder(setting) {
+                // Process root folder to find versions and bookmark history/collection
+                do {
+                    try await rootFolderUseCase(selectedURL)
+                } catch let error as TraktorRootFolderError {
+                    // Clear the root folder bookmark since validation failed
+                    try? await folderRepository.removeBookmark(for: TraktorPanelItem.rootFolder.storeKey)
+                    
+                    // Set error message for display
+                    errorMessage = error.localizedDescription
+                    
+                    // Reload paths to reflect cleared state
+                    await loadFolderPaths()
+                    return
+                } catch {
+                    // Other errors from rootFolderUseCase - clear bookmark and reload
+                    try? await folderRepository.removeBookmark(for: TraktorPanelItem.rootFolder.storeKey)
+                    await loadFolderPaths()
+                    return
+                }
+            }
+            
+            // Reload all paths after saving
+            await loadFolderPaths()
         }
         
         func isRootFolder(_ setting: FolderSetting) -> Bool {
@@ -113,6 +138,10 @@ extension SettingsView {
             
             // Reload folder paths to reflect cleared state
             await loadFolderPaths()
+        }
+        
+        func clearErrorMessage() {
+            errorMessage = nil
         }
     }
     

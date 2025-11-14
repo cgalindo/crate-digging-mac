@@ -7,13 +7,13 @@
 
 import Foundation
 
-/// Protocol for displaying folder selection panels and saving selected bookmarks.
+/// Protocol for displaying folder selection panels.
 public protocol FolderPanelProtocol: Sendable {
     
-    /// Displays a folder selection panel for the given panel item and saves the selected bookmark.
+    /// Displays a folder selection panel for the given panel item and returns the selected URL.
     /// - Parameter panelItem: The panel item configuration that determines panel behavior
-    /// - Throws: An error if the bookmark cannot be saved or if the user cancels the selection
+    /// - Returns: The selected URL, or `nil` if the user cancelled the selection
     /// - Note: Implementations should ensure this method runs on the main actor for UI operations
-    func showPanel(for panelItem: PanelItem) async throws
+    func showPanel(for panelItem: PanelItem) async -> URL?
 }
 

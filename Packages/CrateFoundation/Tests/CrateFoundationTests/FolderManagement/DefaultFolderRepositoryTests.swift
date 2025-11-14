@@ -163,6 +163,103 @@ struct DefaultFolderRepositoryTests {
         }
     }
     
+    // MARK: - Remove Bookmark Tests
+    
+    @Test func removeBookmarkSuccess() async throws {
+        // Given
+        let mockBookmarkStore = DefaultBookmarkStoreMock()
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
+        let testURL = URL(fileURLWithPath: "/test/path")
+        let testKey = "test-key"
+        
+        // Pre-populate the mock store
+        try await mockBookmarkStore.saveBookmark(testURL, for: testKey)
+        #expect(await mockBookmarkStore.hasBookmark(for: testKey))
+        
+        // When
+        try await repository.removeBookmark(for: testKey)
+        
+        // Then
+        #expect(await mockBookmarkStore.hasBookmark(for: testKey) == false)
+        #expect(await mockBookmarkStore.getStoredBookmarkCount() == 0)
+    }
+    
+    @Test func removeBookmarkWithMultipleBookmarks() async throws {
+        // Given
+        let mockBookmarkStore = DefaultBookmarkStoreMock()
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
+        let url1 = URL(fileURLWithPath: "/test/path1")
+        let url2 = URL(fileURLWithPath: "/test/path2")
+        let key1 = "key1"
+        let key2 = "key2"
+        
+        // Pre-populate the mock store
+        try await mockBookmarkStore.saveBookmark(url1, for: key1)
+        try await mockBookmarkStore.saveBookmark(url2, for: key2)
+        #expect(await mockBookmarkStore.getStoredBookmarkCount() == 2)
+        
+        // When
+        try await repository.removeBookmark(for: key1)
+        
+        // Then
+        #expect(await mockBookmarkStore.hasBookmark(for: key1) == false)
+        #expect(await mockBookmarkStore.hasBookmark(for: key2) == true)
+        #expect(await mockBookmarkStore.getStoredBookmarkCount() == 1)
+    }
+    
+    @Test func removeBookmarkThrowsErrorForNonExistentKey() async {
+        // Given
+        let mockBookmarkStore = DefaultBookmarkStoreMock()
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
+        let nonExistentKey = "non-existent-key"
+        
+        // When & Then
+        await #expect(throws: BookmarkError.bookmarkNotFound(nonExistentKey)) {
+            try await repository.removeBookmark(for: nonExistentKey)
+        }
+    }
+    
+    @Test func removeBookmarkPropagatesError() async throws {
+        // Given
+        let mockBookmarkStore = DefaultBookmarkStoreMock()
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
+        let testError = BookmarkError.emptyKey
+        let testKey = "test-key"
+        
+        // Pre-populate the mock store
+        try await mockBookmarkStore.saveBookmark(URL(fileURLWithPath: "/test/path"), for: testKey)
+        
+        await mockBookmarkStore.setShouldThrowError(true, error: testError)
+        
+        // When & Then
+        await #expect(throws: BookmarkError.emptyKey) {
+            try await repository.removeBookmark(for: testKey)
+        }
+    }
+    
+    @Test func removeBookmarkAfterFetch() async throws {
+        // Given
+        let mockBookmarkStore = DefaultBookmarkStoreMock()
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
+        let testURL = URL(fileURLWithPath: "/test/path")
+        let testKey = "test-key"
+        
+        // Pre-populate the mock store
+        try await mockBookmarkStore.saveBookmark(testURL, for: testKey)
+        
+        // Verify bookmark exists
+        let fetched = try await repository.fetchBookmark(for: testKey)
+        #expect(fetched == testURL.absoluteString)
+        
+        // When
+        try await repository.removeBookmark(for: testKey)
+        
+        // Then - Fetch should fail
+        await #expect(throws: BookmarkError.bookmarkNotFound(testKey)) {
+            try await repository.fetchBookmark(for: testKey)
+        }
+    }
+    
     // MARK: - Integration Tests
     
     @Test func saveAndFetchBookmarkRoundTrip() async throws {
@@ -201,6 +298,49 @@ struct DefaultFolderRepositoryTests {
         }
         
         #expect(await mockBookmarkStore.getStoredBookmarkCount() == 5)
+    }
+    
+    @Test func saveRemoveAndFetchRoundTrip() async throws {
+        // Given
+        let mockBookmarkStore = DefaultBookmarkStoreMock()
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
+        let testURL = URL(fileURLWithPath: "/test/roundtrip/path")
+        let testKey = "roundtrip-key"
+        let bookmark = Bookmark(url: testURL, key: testKey)
+        
+        // When - Save, remove, then try to fetch
+        try await repository.save(bookmark)
+        #expect(await mockBookmarkStore.hasBookmark(for: testKey))
+        
+        try await repository.removeBookmark(for: testKey)
+        #expect(await mockBookmarkStore.hasBookmark(for: testKey) == false)
+        
+        // Then - Fetch should fail
+        await #expect(throws: BookmarkError.bookmarkNotFound(testKey)) {
+            try await repository.fetchBookmark(for: testKey)
+        }
+    }
+    
+    @Test func saveRemoveAndSaveAgain() async throws {
+        // Given
+        let mockBookmarkStore = DefaultBookmarkStoreMock()
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
+        let originalURL = URL(fileURLWithPath: "/original/path")
+        let newURL = URL(fileURLWithPath: "/new/path")
+        let testKey = "test-key"
+        
+        let originalBookmark = Bookmark(url: originalURL, key: testKey)
+        let newBookmark = Bookmark(url: newURL, key: testKey)
+        
+        // When - Save, remove, then save again
+        try await repository.save(originalBookmark)
+        try await repository.removeBookmark(for: testKey)
+        try await repository.save(newBookmark)
+        
+        // Then - Should have the new bookmark
+        let result = try await repository.fetchBookmark(for: testKey)
+        #expect(result == newURL.absoluteString)
+        #expect(await mockBookmarkStore.getStoredBookmarkCount() == 1)
     }
     
     // MARK: - Edge Cases
@@ -363,6 +503,29 @@ struct DefaultFolderRepositoryTests {
         await mockBookmarkStore.setShouldThrowError(false)
         let result = try await repository.fetchBookmark(for: testKey)
         #expect(result == testURL.absoluteString)
+    }
+    
+    @Test func removeBookmarkRecoversFromError() async throws {
+        // Given
+        let mockBookmarkStore = DefaultBookmarkStoreMock()
+        let repository = DefaultFolderRepository(bookmarkStore: mockBookmarkStore)
+        let testURL = URL(fileURLWithPath: "/test/path")
+        let testKey = "test-key"
+        
+        // Pre-populate the mock store
+        try await mockBookmarkStore.saveBookmark(testURL, for: testKey)
+        #expect(await mockBookmarkStore.hasBookmark(for: testKey))
+        
+        // When - First attempt fails
+        await mockBookmarkStore.setShouldThrowError(true, error: BookmarkError.emptyKey)
+        await #expect(throws: BookmarkError.emptyKey) {
+            try await repository.removeBookmark(for: testKey)
+        }
+        
+        // Then - Recovery succeeds
+        await mockBookmarkStore.setShouldThrowError(false)
+        try await repository.removeBookmark(for: testKey)
+        #expect(await mockBookmarkStore.hasBookmark(for: testKey) == false)
     }
 }
 
